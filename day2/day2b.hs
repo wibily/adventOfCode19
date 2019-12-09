@@ -38,15 +38,24 @@ run i program =
         End -> program
         _   -> run (i + 4) newProgram
 
-testProgram :: Program
-testProgram = [1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50]
-
-initProgram :: Program -> Program
-initProgram program =
-  let p1 = replace 1 12 program
-      p2 = replace 2 2 p1
+initProgram :: Int -> Int -> Program -> Program
+initProgram noun verb program =
+  let p1 = replace 1 noun program
+      p2 = replace 2 verb p1
   in  p2
 
+magicNumber = 19690720
+
+getResult :: Int -> Int -> Program -> Int
+getResult noun verb program =
+  let seededProgram = initProgram noun verb program
+  in  (run 0 seededProgram) !! 0
+
+pairs = [ (x, y) | x <- [0 .. 99], y <- [0 .. 99] ]
+
+solution =
+  filter (\(noun, verb) -> getResult noun verb program == magicNumber) pairs
+--[(76,10)]
 program :: Program
 program =
   [ 1
@@ -215,6 +224,3 @@ program =
   , 0
   , 0
   ]
-
-part1 :: Program
-part1 = run 0 (initProgram program)

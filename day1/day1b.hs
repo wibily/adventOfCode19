@@ -105,13 +105,17 @@ input =
   , 79585
   ]
 
-zero :: Int -> Int
-zero num | num <= 0  = 0
-         | otherwise = num
+calculateFuel :: Int -> Int
+calculateFuel mass = ((mass `div` 3) - 2)
 
 getFuel :: Int -> Int
-getFuel mass = (mass `div` 3) - 2
+getFuel fuel
+  | fuel <= 0 = 0
+  | otherwise  = fuel + getFuel (calculateFuel fuel)
+
+getTotalFuel :: Int -> Int
+getTotalFuel mass = let fuel = calculateFuel mass in
+  getFuel fuel
 
 -- main :: IO ()
--- main = print $ foldr ((+) . getFuel) 0 input
-
+-- main = print $ foldr ((+) . getTotalFuel) 0 input
